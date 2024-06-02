@@ -23,7 +23,7 @@ SOFTWARE.
 This is a simple PID controller I implemented for use in my RC plane flight stabilization software. Inspiration for this came from a great video by DigiKey about PID controllers on youtube. You can check out the video [here](https://www.youtube.com/watch?v=tFVAaUcOm4I).
 
 You might have to implement a way to mitigate against integral windup depending on what you're controlling.
-A simple way to achieve this is to reset the integral variable of the PID controller. You can use the Reset() function to achieve this.
+A simple way to achieve this is to reset the integral variable of the PID controller. You can use the ResetPID() function to achieve this.
 
 Below are other slightly more sophisticated ways to deal with integral windup:
 
