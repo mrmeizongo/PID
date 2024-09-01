@@ -1,3 +1,4 @@
+/*
 MIT License
 
 Copyright(c) 2024 Jamal Meizongo
@@ -18,24 +19,41 @@ Copyright(c) 2024 Jamal Meizongo
     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
-
+*/
 #pragma once
+#include <inttypes.h>
 
-    class PID
+class PID
 {
 public:
-    PID();                                // Empty Constructor
-    PID(float, float, float);             // Constructor with initialization parameters
-    void Initialize(float, float, float); // Initialize the PID controller
-    void ResetPID(void);                  // Reset PID controller parameters
-    float Compute(float);                 // Generate the PID output to be added to the servo
+    PID();                           // Empty Constructor
+    PID(float, float, float, float); // Constructor with initialization parameters
+    void ResetI(void);               // Reset PID integrator
+    float Compute(float);            // Generate the PID output to be added to the servo
+
+    float getKp(void) { return Kp; }
+    float getKi(void) { return Ki; }
+    float getKd(void) { return Kd; }
+
+    void setKp(float _Kp) { Kp = _Kp; }
+    void setKi(float _Ki) { Ki = _Ki; }
+    void setKd(float _Kd) { Kd = _Kd; }
 
 private:
     float Kp;
-    float Kd;
     float Ki;
+    float Kd;
+    float IMax;
 
-    double integral;
+    /// Low pass filter cut frequency for derivative calculation.
+    ///
+    /// 20 Hz because anything over that is probably noise, see
+    /// http://en.wikipedia.org/wiki/Low-pass_filter.
+    ///
+    static const uint8_t fCut = 20;
+
+    float integrator;
     float previousError;
-    unsigned long lastTime;
+    float previousDerivative; // for low-pass filter calculation
+    unsigned long previousTime;
 };
