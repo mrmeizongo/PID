@@ -103,6 +103,7 @@ float PID::Compute(float currentError)
 
         // discrete low pass filter, cuts out the
         // high frequency noise that can drive the controller crazy
+        // See https://en.wikipedia.org/wiki/Low-pass_filter#
         float RC = 1 / (2 * M_PI * fCut);
         derivative = previousDerivative +
                      ((deltaTime / (RC + deltaTime)) *
