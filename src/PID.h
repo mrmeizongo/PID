@@ -26,14 +26,14 @@ Copyright (C) 2024 Jamal Meizongo
 
 #ifndef _PID_H
 #define _PID_H
-#include <inttypes.h>
+#include <Arduino.h>
 
 class PID
 {
 public:
     PID();                           // Empty Constructor
     PID(float, float, float, float); // Constructor with initialization parameters
-    void ResetI(void);               // Reset PID integrator
+    void Reset(void);                // Reset PID integrator
     int16_t Compute(float);          // Generate the PID output to be added to the servo
 
     float getKp(void) { return Kp; }
@@ -59,9 +59,9 @@ private:
     ///
     static const uint8_t fCut = 20;
 
-    float integrator;
-    float previousError;
-    float previousDerivative; // for low-pass filter calculation
-    unsigned long previousTime;
+    float integrator = 0;
+    float previousError = 0;
+    float previousDerivative = NAN; // for low-pass filter calculation
+    unsigned long previousTime = 0;
 };
 #endif //_PID_H

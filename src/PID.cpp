@@ -20,28 +20,21 @@ Copyright(c) 2024 Jamal Meizongo
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 */
-
-#include <Arduino.h>
 #include "PID.h"
 
 PID::PID()
-    : Kp{1}, Ki{1}, Kd{1}, IMax{100}
-{
-    // set previousDerivative as invalid on startup
-    previousDerivative = NAN;
-}
+    : Kp{1}, Ki{1}, Kd{1}, Kf{1}, IMax{100} {}
 
 PID::PID(float _Kp, float _Ki, float _Kd, float _IMax)
     : Kp{_Kp}, Ki{_Ki}, Kd{_Kd}, IMax{_IMax}
 {
-    // set previousDerivative as invalid on startup
-    previousDerivative = NAN;
 }
 
 // Resets PID
-void PID::ResetI(void)
+void PID::Reset(void)
 {
     integrator = 0;
+    // Set previousDerivative as invalid on reset
     previousDerivative = NAN;
 }
 
@@ -60,7 +53,7 @@ float PID::Compute(float currentError)
     if (previousTime == 0 || dt > 1000)
     {
         dt = 0;
-        ResetI();
+        Reset();
     }
 
     deltaTime = (float)dt * 0.001f;
