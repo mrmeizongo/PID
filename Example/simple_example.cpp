@@ -9,8 +9,7 @@ float Ki = 0.2f;
 float Kd = 0.001f;
 float IMax = 100.0f;
 
-PID *myController; // Empty constructor, default gain and integrator max (1, 1, 1, 100)
-// PID myController{_Kp, _Ki, _Kd, _iMax};    // Constructor with gain values set
+PID myController{_Kp, _Ki, _Kd, _iMax}; // Constructor with gain values set
 
 float setPoint = 72;
 float actual = 0;
@@ -18,7 +17,6 @@ float output = 0;
 
 void setup()
 {
-    myController = new PID(Kp, Ki, Kd, IMax);
     pinMode(INPUT_PIN, INPUT);
     pinMode(OUTPUT_PIN, OUTPUT);
 }
