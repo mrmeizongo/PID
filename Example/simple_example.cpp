@@ -18,10 +18,6 @@ float output = 0;
 
 void setup()
 {
-    /*
-     * NOTE: When an empty constructor is used to declare a controller, the Initialize() function must be called
-     * to set the gain values and setup the controller
-     */
     myController = new PID(Kp, Ki, Kd, IMax);
     pinMode(INPUT_PIN, INPUT);
     pinMode(OUTPUT_PIN, OUTPUT);
