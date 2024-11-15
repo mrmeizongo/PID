@@ -20,19 +20,33 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-This is a simple PID controller I implemented for use in my RC plane flight stabilization software. Inspiration for this came from a great video by DigiKey about PID controllers on youtube. You can check out the video [here](https://www.youtube.com/watch?v=tFVAaUcOm4I).
+This is a simple PID controller I implemented for use in my RC plane flight stabilization software.  
+Here's a breakdown of the gains in a PID controller:
 
-You might have to implement a way to mitigate against integral windup depending on what you're controlling.
-A simple way to achieve this is to reset the integral variable of the PID controller. You can use the ResetPID() function to achieve this.
+## Proportional Gain (P):
 
-Below are other slightly more sophisticated ways to deal with integral windup:
+This gain determines the reaction to the current error value. A higher proportional gain results in a larger correction based on the current error. However, if the gain is too high, it can lead to system instability and oscillations.
 
-#### NOTE: You will have to modify the PID library to achieve these.
+## Integral Gain (I):
 
-1. Initializing the Controller Integral: You can initialize the controller integral to a desired value, for instance, to the value before the problem.
+This gain accounts for the accumulation of past errors. It helps eliminate residual steady-state errors that the proportional gain alone cannot correct. The integral gain sums up the past errors and applies a correction based on the cumulative error. If the integral gain is too high, it can cause the system to become sluggish and oscillate.
 
-2. Increasing the Setpoint in a Suitable Ramp: Gradually increasing the setpoint can help prevent sudden large errors and thus reduce the chance of integral windup.
+## Derivative Gain (D):
 
-3. Conditional Integration: This involves disabling the integral function until the process variable (PV) has entered the controllable region.
+This gain predicts future error based on the rate of change of the error. It helps to dampen the system response and reduce overshoot. A higher derivative gain can improve system stability, but if it's too high, it can amplify noise and cause instability.
 
-4. Anti-Windup Schemes: These are methods that prevent the integral term from accumulating beyond certain limits. One common method is the back-calculation anti-windup, which uses a feedback loop to unwind the PID Controller block internal integrator when the controller hits specified saturation limits
+# DISCLAIMER:
+
+Do not expect this software to out perform other more established PIDF control softwares. This code shall be considered as highly experimental and is not designed or written to any safety critical, or mission critical standards. It is given/shared for free with the knowledge and understanding that this open source PID control software is only for personal or hobby use. It is intended to be used or modified to suit your needs. The author(s) shall not be held responsible or accountable for any damage, injury or loss that may be inflicted or incurred as a result of the use of misuse of this code. Use and modify at your own risk.
+
+By using this, or any part of this software, you are agreeing to [this license agreement.](LICENSE)
+
+To put it more bluntly:
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
