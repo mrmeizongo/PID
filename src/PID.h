@@ -33,8 +33,8 @@ class PID
 public:
     PID();                           // Empty Constructor
     PID(float, float, float, float); // Constructor with initialization parameters
-    void Reset(void);                // Reset PID integrator
-    int16_t Compute(float);          // Generate the PID output to be added to the servo
+    void Reset(void);                // Reset PID controller
+    int16_t Compute(float, float);   // Generate the PID output to be added to the servo
 
     float getKp(void) { return Kp; }
     float getKi(void) { return Ki; }
@@ -46,22 +46,23 @@ public:
     void setKd(float _Kd) { Kd = _Kd; }
     void setIMax(float _IMax) { IMax = _IMax; }
 
+    // Set last time PIDF::Compute was called. This essentially resets the PIDF
+    // when set to 0. This is the preferred way to reset the PIDF as it affects the dt calculation
+    void setPreviousTime(unsigned long _previousTime) { previousTime = _previousTime; }
+    unsigned long getPreviousTime(void) { return previousTime; } // Get last time PIDF::Compute was called
+
 private:
     float Kp;
     float Ki;
     float Kd;
     float IMax;
 
-    /// Low pass filter cut frequency for derivative calculation.
-    ///
-    /// 20 Hz because anything over that is probably noise, see
-    /// http://en.wikipedia.org/wiki/Low-pass_filter.
-    ///
-    static const uint8_t fCut = 20;
+    // First order low pass filter for derivative
+    float RC;
+    float previousDerivative;
 
-    float integrator = 0;
-    float previousError = 0;
-    float previousDerivative = NAN; // for low-pass filter calculation
-    unsigned long previousTime = 0;
+    float integrator;
+    float previousError;
+    unsigned long previousTime;
 };
 #endif //_PID_H

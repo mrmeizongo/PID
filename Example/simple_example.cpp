@@ -25,8 +25,7 @@ void loop()
 {
     actual = map(analogRead(INPUT_PIN), 0, 1024, 0, 255);
 
-    float error = setPoint - actual;
-    output = myController->Compute(error);
+    output = myController->Compute(setPoint, actual);
     analogWrite(OUTPUT_PIN, output);
 
     Serial.print("Output is: ");

@@ -28,6 +28,16 @@ PID::PID()
 PID::PID(float _Kp, float _Ki, float _Kd, float _IMax)
     : Kp{_Kp}, Ki{_Ki}, Kd{_Kd}, IMax{_IMax}
 {
+    /// Low pass filter cut frequency for derivative calculation.
+    ///
+    /// 20 Hz because anything over that is probably noise, see
+    /// http://en.wikipedia.org/wiki/Low-pass_filter.
+    ///
+    RC = 1.0f / (2.0f * M_PI * 20.0f);
+    previousDerivative = NAN;
+    integrator = 0;
+    previousError = 0;
+    previousTime = 0;
 }
 
 // Resets PID
@@ -39,10 +49,11 @@ void PID::Reset(void)
 }
 
 // Main function to be called to get PID control value
-float PID::Compute(float currentError)
+float PID::Compute(float currentError, float currentPoint)
 {
     unsigned long currentTime = millis();
     unsigned long dt = currentTime - previousTime;
+    float currentError = setPoint - currentPoint;
     float output = 0.0f;
     float deltaTime;
 
@@ -97,10 +108,7 @@ float PID::Compute(float currentError)
         // discrete low pass filter, cuts out the
         // high frequency noise that can drive the controller crazy
         // See https://en.wikipedia.org/wiki/Low-pass_filter#
-        float RC = 1 / (2 * M_PI * fCut);
-        derivative = previousDerivative +
-                     ((deltaTime / (RC + deltaTime)) *
-                      (derivative - previousDerivative));
+        derivative = previousDerivative + ((deltaTime / (RC + deltaTime)) * (derivative - previousDerivative));
 
         // Update state
         previousError = currentError;
